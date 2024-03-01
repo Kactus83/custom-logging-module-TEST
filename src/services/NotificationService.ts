@@ -1,9 +1,9 @@
-import { LogLevel, LoggerClient, LoggerMode } from "custom-logging-module";
+import { LogLevel, SubProcessLoggerClient } from "custom-logging-module";
 import { delay, randomChoice } from "../utils/test-utils";
 
-export class NotificationService extends LoggerClient {
+export class NotificationService extends SubProcessLoggerClient {
     constructor() {
-        super(LoggerMode.COLORED, "NotificationService", false);
+        super("NotificationService");
     }
 
     async sendNotification(): Promise<void> {

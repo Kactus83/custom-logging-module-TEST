@@ -1,9 +1,9 @@
-import { LogLevel, LoggerClient, LoggerMode } from "custom-logging-module";
+import { LogLevel, SubProcessLoggerClient } from "custom-logging-module";
 import { delay, randomChoice } from "../utils/test-utils";
 
-export class DataService extends LoggerClient {
+export class DataService extends SubProcessLoggerClient {
     constructor() {
-        super(LoggerMode.COLORED, "DataService", false);
+        super("DataService");
     }
 
     async fetchData(): Promise<void> {

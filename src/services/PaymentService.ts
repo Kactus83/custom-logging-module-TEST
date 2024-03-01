@@ -1,9 +1,9 @@
-import { LogLevel, LoggerClient, LoggerMode } from "custom-logging-module";
+import { LogLevel, SubProcessLoggerClient } from "custom-logging-module";
 import { delay, randomChoice } from "../utils/test-utils";
 
-export class PaymentService extends LoggerClient {
+export class PaymentService extends SubProcessLoggerClient {
     constructor() {
-        super(LoggerMode.COLORED, "PaymentService", false);
+        super("PaymentService");
     }
 
     async processPayment(): Promise<void> {
