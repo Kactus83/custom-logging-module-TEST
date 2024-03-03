@@ -1,9 +1,16 @@
-import { LogLevel, SubProcessLoggerClient } from "custom-logging-module";
+import { LogLevel, LoggerClient, SubProcessLoggerConfig } from "custom-logging-module";
 import { delay, randomChoice } from "../utils/test-utils";
 
-export class AuthService extends SubProcessLoggerClient {
+export class AuthService extends LoggerClient {
+
     constructor() {
-        super("AuthService");
+
+        super(
+            new SubProcessLoggerConfig(
+                "AuthService", 
+                "SomeApp"
+                )
+            );
     }
 
     async authenticateUser(): Promise<boolean> {

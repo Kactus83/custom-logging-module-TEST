@@ -1,11 +1,17 @@
-import { LogLevel, SubProcessLoggerClient } from "custom-logging-module";
+import { LogLevel, LoggerClient, SubProcessLoggerConfig } from "custom-logging-module";
 import { delay, randomChoice } from "../utils/test-utils";
 
-export class DataService extends SubProcessLoggerClient {
-    constructor() {
-        super("DataService");
-    }
+export class DataService extends LoggerClient {
 
+    constructor() {
+        
+        super(
+            new SubProcessLoggerConfig(
+                "DataService", 
+                "SomeApp"
+                )
+            );
+    }
     async fetchData(): Promise<void> {
         this.log(LogLevel.TRACE, "Début de la récupération des données.");
 

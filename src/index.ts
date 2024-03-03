@@ -1,4 +1,4 @@
-import { LoggerClient, LogLevel, ColorChoice, LoggerMode, MainProcessLoggerClient } from "custom-logging-module";
+import { LoggerClient, LogLevel, LoggerMode, MainProcessLoggerConfig } from "custom-logging-module";
 import { delay } from "./utils/test-utils";
 import { AuthService } from "./services/AuthService";
 import { DataService } from "./services/DataService";
@@ -6,14 +6,20 @@ import { NotificationService } from "./services/NotificationService";
 import { PaymentService } from "./services/PaymentService";
 
 
-class SomeApp extends MainProcessLoggerClient {
+class SomeApp extends LoggerClient {
     authService: AuthService;
     dataService: DataService;
     notificationService: NotificationService;
     paymentService: PaymentService;
 
     constructor() {
-        super("SomeApp", LoggerMode.COLORED, LogLevel.TRACE);
+        super(
+            new MainProcessLoggerConfig(
+                "SomeApp", 
+                LoggerMode.COLORED, 
+                LogLevel.TRACE
+                )
+            );
         this.authService = new AuthService();
         this.dataService = new DataService();
         this.notificationService = new NotificationService();
