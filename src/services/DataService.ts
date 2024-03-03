@@ -1,19 +1,20 @@
 import { LogLevel, LoggerClient, SubProcessLoggerConfig } from "custom-logging-module";
 import { delay, randomChoice } from "../utils/test-utils";
+import { HttpClientService } from "./HttpClientService"; // Assurez-vous d'importer HttpClientService
 
 export class DataService extends LoggerClient {
 
+    private httpClientService: HttpClientService = new HttpClientService(); // Ajout du HttpClientService
+
     constructor() {
-        
-        super(
-            new SubProcessLoggerConfig(
-                "DataService", 
-                "SomeApp"
-                )
-            );
+        super(new SubProcessLoggerConfig("DataService", "SomeApp"));
     }
+
     async fetchData(): Promise<void> {
         this.log(LogLevel.TRACE, "Début de la récupération des données.");
+
+        // Simuler une requête HTTP pour illustrer la récupération de données depuis une API externe
+        await this.httpClientService.sendHttpRequest();
 
         // Étape 1: Connexion à la base de données
         await delay(randomChoice([100, 200, 300]));

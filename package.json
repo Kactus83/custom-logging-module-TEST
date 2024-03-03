@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "./dist/index.js",
   "dependencies": {
-    "custom-logging-module": "^0.0.43"
+    "custom-logging-module": "^0.0.44"
   },
   "devDependencies": {
     "ts-node": "^10.9.2",

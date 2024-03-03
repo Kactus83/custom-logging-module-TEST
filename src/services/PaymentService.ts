@@ -1,21 +1,24 @@
 import { LogLevel, LoggerClient, SubProcessLoggerConfig } from "custom-logging-module";
 import { delay, randomChoice } from "../utils/test-utils";
+import { LogisticsService } from "./LogisticsService";
+import { HttpClientService } from "./HttpClientService";
 
 export class PaymentService extends LoggerClient {
+    
+    private logisticsService: LogisticsService = new LogisticsService();
+    private httpClientService: HttpClientService = new HttpClientService();
 
     constructor() {
-        
-        super(
-            new SubProcessLoggerConfig(
-                "PaymentService", 
-                "SomeApp"
-                )
-            );
+        super(new SubProcessLoggerConfig("PaymentService", "SomeApp"));
     }
 
     async processPayment(): Promise<void> {
         this.log(LogLevel.TRACE, "Début du processus de paiement.");
 
+        // Simuler une requête HTTP pour valider les détails de paiement
+        await this.httpClientService.sendHttpRequest();
+        // La logique suivante dépend des résultats simulés par sendHttpRequest
+        
         // Étape 1: Validation des détails de paiement
         await delay(randomChoice([100, 200, 300]));
         if (Math.random() < 0.1) {
@@ -32,14 +35,10 @@ export class PaymentService extends LoggerClient {
         }
         this.log(LogLevel.DEBUG, "Solvabilité vérifiée avec succès.");
 
-        // Étape 3: Communication avec le processeur de paiement
-        await delay(randomChoice([100, 200, 300]));
-        if (Math.random() < 0.2) {
-            this.log(LogLevel.ERROR, "Échec de la communication avec le processeur de paiement.");
-            return;
-        }
-        this.log(LogLevel.DEBUG, "Communication avec le processeur de paiement réussie.");
-
+        // Simuler une requête HTTP pour confirmer la transaction avec le processeur de paiement
+        await this.httpClientService.sendHttpRequest();
+        // La logique suivante dépend des résultats simulés par sendHttpRequest
+        
         // Étape 4: Finalisation du paiement
         await delay(randomChoice([100, 200, 300]));
         if (Math.random() < 0.25) {
@@ -47,5 +46,8 @@ export class PaymentService extends LoggerClient {
             return;
         }
         this.log(LogLevel.INFO, "Paiement traité et finalisé avec succès.");
+        
+        // Gérer les actions logistiques post-paiement
+        await this.logisticsService.handlePostPaymentLogistics();
     }
 }

@@ -1,7 +1,12 @@
 import { LogLevel, LoggerClient, SubProcessLoggerConfig } from "custom-logging-module";
 import { delay, randomChoice } from "../utils/test-utils";
+import { LogisticsService } from "./LogisticsService";
+import { HttpClientService } from "./HttpClientService";
 
 export class NotificationService extends LoggerClient {
+
+    private logisticsService: LogisticsService = new LogisticsService();
+    private httpClientService: HttpClientService = new HttpClientService(); 
 
     constructor() {
         
@@ -15,6 +20,9 @@ export class NotificationService extends LoggerClient {
 
     async sendNotification(): Promise<void> {
         this.log(LogLevel.TRACE, "Début de la préparation de la notification.");
+        
+        // Simuler une requête HTTP pour l'envoi de la notification
+        await this.httpClientService.sendHttpRequest();
 
         // Étape 1: Préparation du contenu de la notification
         await delay(randomChoice([100, 200, 300]));
@@ -47,5 +55,14 @@ export class NotificationService extends LoggerClient {
             return;
         }
         this.log(LogLevel.INFO, "Notification envoyée avec succès.");
+        
+        if (Math.random() < 0.25) {
+            this.log(LogLevel.ERROR, "Échec de l'envoi de la notification.");
+            return;
+        }
+
+        this.log(LogLevel.INFO, "Notification envoyée avec succès.");
+        
+        await this.logisticsService.handlePostNotificationLogistics();
     }
 }
