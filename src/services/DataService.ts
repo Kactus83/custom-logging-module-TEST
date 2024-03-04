@@ -1,13 +1,13 @@
-import { LogLevel, LoggerClient, SubProcessLoggerConfig } from "custom-logging-module";
+import { LogLevel, SubProcessLoggerClient } from "custom-logging-module";
 import { delay, randomChoice } from "../utils/test-utils";
-import { HttpClientService } from "./HttpClientService"; // Assurez-vous d'importer HttpClientService
+import { HttpClientService } from "./HttpClientService"; 
 
-export class DataService extends LoggerClient {
+export class DataService extends SubProcessLoggerClient {
 
-    private httpClientService: HttpClientService = new HttpClientService(); // Ajout du HttpClientService
+    private httpClientService: HttpClientService = new HttpClientService(this); 
 
-    constructor() {
-        super(new SubProcessLoggerConfig("DataService", "SomeApp"));
+    constructor(parent: any) {
+        super("DataService", parent);
     }
 
     async fetchData(): Promise<void> {
@@ -35,9 +35,19 @@ export class DataService extends LoggerClient {
         // Étape 3: Traitement des données
         await delay(randomChoice([100, 200, 300]));
         if (Math.random() < 0.25) {
-            this.log(LogLevel.ERROR, "Erreur lors du traitement des données.");
+            const errorDetails = {
+                error: "Erreur lors du traitement des données",
+                code: 500,
+                context: {
+                    step: "Traitement des données",
+                    requestId: "abc123",
+                    additionalInfo: "Détail supplémentaire sur l'erreur"
+                }
+            };
+            this.log(LogLevel.ERROR, "Erreur lors du traitement des données.", errorDetails);
             return;
         }
+        
         this.log(LogLevel.DEBUG, "Données traitées avec succès.");
 
         // Étape 4: Envoi des données
@@ -47,5 +57,24 @@ export class DataService extends LoggerClient {
             return;
         }
         this.log(LogLevel.INFO, "Données envoyées avec succès.");
+
+        // Simuler une réponse détaillée de l'API externe
+        const apiResponse = {
+            status: 200,
+            data: {
+                users: [
+                    { id: 1, name: "John Doe", email: "john.doe@example.com" },
+                    { id: 2, name: "Jane Doe", email: "jane.doe@example.com" }
+                ],
+                metadata: {
+                    pageCount: 10,
+                    currentPage: 1,
+                    hasMore: true
+                }
+            },
+            timestamp: new Date().toISOString()
+        };
+        this.log(LogLevel.DEBUG, "Réponse de l'API externe reçue avec succès.", apiResponse);
+
     }
 }

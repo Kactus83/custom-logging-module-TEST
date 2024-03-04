@@ -1,15 +1,15 @@
-import { LogLevel, LoggerClient, SubProcessLoggerConfig } from "custom-logging-module";
+import { LogLevel, SubProcessLoggerClient } from "custom-logging-module";
 import { delay, randomChoice } from "../utils/test-utils";
 import { LogisticsService } from "./LogisticsService";
 import { HttpClientService } from "./HttpClientService";
 
-export class PaymentService extends LoggerClient {
+export class PaymentService extends SubProcessLoggerClient {
     
-    private logisticsService: LogisticsService = new LogisticsService();
-    private httpClientService: HttpClientService = new HttpClientService();
+    private logisticsService: LogisticsService = new LogisticsService(this);
+    private httpClientService: HttpClientService = new HttpClientService(this);
 
-    constructor() {
-        super(new SubProcessLoggerConfig("PaymentService", "SomeApp"));
+    constructor(parent: any) {
+        super("PaymentService", parent);
     }
 
     async processPayment(): Promise<void> {
@@ -45,7 +45,8 @@ export class PaymentService extends LoggerClient {
             this.log(LogLevel.ERROR, "Échec de la finalisation du paiement.");
             return;
         }
-        this.log(LogLevel.INFO, "Paiement traité et finalisé avec succès.");
+        const paymentDetails = { amount: 100, currency: "EUR", status: "success" };
+        this.log(LogLevel.INFO, "Paiement traité et finalisé avec succès.", paymentDetails);        
         
         // Gérer les actions logistiques post-paiement
         await this.logisticsService.handlePostPaymentLogistics();

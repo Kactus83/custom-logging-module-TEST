@@ -1,4 +1,4 @@
-import { LogLevel, LoggerClient, SubProcessLoggerConfig } from "custom-logging-module";
+import { LogLevel, SubProcessLoggerClient } from "custom-logging-module";
 import { delay, randomChoice } from "../utils/test-utils";
 
 interface HttpRequestOutcome {
@@ -6,9 +6,10 @@ interface HttpRequestOutcome {
     message: string;
 }
 
-export class HttpClientService extends LoggerClient {
-    constructor() {
-        super(new SubProcessLoggerConfig("HttpClientService", "SomeApp"));
+export class HttpClientService extends SubProcessLoggerClient {
+
+    constructor(parent: any) {
+        super("HttpClientService", parent);
     }
 
     async sendHttpRequest(): Promise<void> {

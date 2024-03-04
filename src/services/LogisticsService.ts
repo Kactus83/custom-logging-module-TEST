@@ -1,9 +1,10 @@
-import { LogLevel, LoggerClient, SubProcessLoggerConfig } from "custom-logging-module";
+import { LogLevel, SubProcessLoggerClient } from "custom-logging-module";
 import { delay, randomChoice } from "../utils/test-utils";
 
-export class LogisticsService extends LoggerClient {
-    constructor() {
-        super(new SubProcessLoggerConfig("LogisticsService", "SomeApp"));
+export class LogisticsService extends SubProcessLoggerClient {
+
+    constructor(parent: any) {
+        super("LogisticsService", parent);
     }
 
     async handlePostPaymentLogistics(): Promise<void> {

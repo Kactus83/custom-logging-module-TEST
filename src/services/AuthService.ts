@@ -1,12 +1,12 @@
-import { LogLevel, LoggerClient, SubProcessLoggerConfig } from "custom-logging-module";
+import { LogLevel, SubProcessLoggerClient } from "custom-logging-module";
 import { delay, randomChoice } from "../utils/test-utils";
-import { HttpClientService } from "./HttpClientService"; // Assurez-vous d'importer HttpClientService
+import { HttpClientService } from "./HttpClientService";
 
-export class AuthService extends LoggerClient {
-    private httpClientService: HttpClientService = new HttpClientService(); // Ajout du HttpClientService
+export class AuthService extends SubProcessLoggerClient {
+    private httpClientService: HttpClientService = new HttpClientService(this); 
 
-    constructor() {
-        super(new SubProcessLoggerConfig("AuthService", "SomeApp"));
+    constructor(parent: any) {
+        super("AuthService", parent);
     }
 
     async authenticateUser(): Promise<boolean> {
@@ -19,7 +19,8 @@ export class AuthService extends LoggerClient {
         // Étape 1: Vérification des identifiants
         await delay(randomChoice([100, 200, 300]));
         if (Math.random() < 0.2) {
-            this.log(LogLevel.ERROR, "Échec de l'authentification: identifiants manquants.");
+            const errorDetails = { error: "Échec de l'authentification", reason: "identifiants manquants" };
+            this.log(LogLevel.ERROR, "Échec de l'authentification: identifiants manquants.", errorDetails);
             return false;
         }
         this.log(LogLevel.DEBUG, "Identifiants vérifiés.");

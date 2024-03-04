@@ -1,21 +1,15 @@
-import { LogLevel, LoggerClient, SubProcessLoggerConfig } from "custom-logging-module";
+import { LogLevel, SubProcessLoggerClient } from "custom-logging-module";
 import { delay, randomChoice } from "../utils/test-utils";
 import { LogisticsService } from "./LogisticsService";
 import { HttpClientService } from "./HttpClientService";
 
-export class NotificationService extends LoggerClient {
+export class NotificationService extends SubProcessLoggerClient {
 
-    private logisticsService: LogisticsService = new LogisticsService();
-    private httpClientService: HttpClientService = new HttpClientService(); 
+    private logisticsService: LogisticsService = new LogisticsService(this);
+    private httpClientService: HttpClientService = new HttpClientService(this); 
 
-    constructor() {
-        
-        super(
-            new SubProcessLoggerConfig(
-                "NotificationService", 
-                "SomeApp"
-                )
-            );
+    constructor(parent: any) {
+        super("NotificationService", parent);
     }
 
     async sendNotification(): Promise<void> {

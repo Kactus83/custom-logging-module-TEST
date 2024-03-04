@@ -1,4 +1,4 @@
-import { LoggerClient, LogLevel, LoggerMode, MainProcessLoggerConfig } from "custom-logging-module";
+import { LogLevel, LoggerDetailsLevel, LoggerMode, MainProcessLoggerClient, MainProcessLoggerConfig } from "custom-logging-module";
 import { delay } from "./utils/test-utils";
 import { AuthService } from "./services/AuthService";
 import { DataService } from "./services/DataService";
@@ -6,7 +6,7 @@ import { NotificationService } from "./services/NotificationService";
 import { PaymentService } from "./services/PaymentService";
 
 
-class SomeApp extends LoggerClient {
+class SomeApp extends MainProcessLoggerClient {
     authService: AuthService;
     dataService: DataService;
     notificationService: NotificationService;
@@ -17,13 +17,16 @@ class SomeApp extends LoggerClient {
             new MainProcessLoggerConfig(
                 "SomeApp", 
                 LoggerMode.COLORED, 
-                LogLevel.TRACE
+                LoggerDetailsLevel.DETAILED,
+                LogLevel.TRACE,
+                true, 
+                true
                 )
             );
-        this.authService = new AuthService();
-        this.dataService = new DataService();
-        this.notificationService = new NotificationService();
-        this.paymentService = new PaymentService();
+        this.authService = new AuthService(this);
+        this.dataService = new DataService(this);
+        this.notificationService = new NotificationService(this);
+        this.paymentService = new PaymentService(this);
     }
 
     async run() {
@@ -34,7 +37,7 @@ class SomeApp extends LoggerClient {
         for (let i = 0; i < 3 && !authSuccess; i++) {
             authSuccess = await this.authService.authenticateUser();
             if (!authSuccess) {
-                this.log(LogLevel.WARN, "Tentative d'authentification échouée, essai " + (i + 2));
+                this.log(LogLevel.WARN, "Tentative d'authentification échouée, essai ", (i + 2));
                 await delay(500); // Attente avant de réessayer
             }
         }
@@ -49,7 +52,7 @@ class SomeApp extends LoggerClient {
             await this.dataService.fetchData();
         } catch (error) {
             const errorMessage = (error instanceof Error) ? error.message : "erreur inconnue";
-            this.log(LogLevel.ERROR, "Erreur lors de la récupération des données: " + errorMessage);
+            this.log(LogLevel.ERROR, "Erreur lors de la récupération des données: ", errorMessage);
         }
 
         // Processus de traitement de paiement
@@ -57,7 +60,7 @@ class SomeApp extends LoggerClient {
             await this.paymentService.processPayment();
         } catch (error) {
             const errorMessage = (error instanceof Error) ? error.message : "erreur inconnue";
-            this.log(LogLevel.ERROR, "Erreur lors du traitement du paiement: " + errorMessage);
+            this.log(LogLevel.ERROR, "Erreur lors du traitement du paiement: ", errorMessage);
         }
 
         // Envoi d'une notification
@@ -65,7 +68,7 @@ class SomeApp extends LoggerClient {
             await this.notificationService.sendNotification();
         } catch (error) {
             const errorMessage = (error instanceof Error) ? error.message : "erreur inconnue";
-            this.log(LogLevel.ERROR, "Erreur lors de l'envoi de la notification: " + errorMessage);
+            this.log(LogLevel.ERROR, "Erreur lors de l'envoi de la notification: ", errorMessage);
         }
 
         this.log(LogLevel.INFO, "SomeApp a terminé ses opérations");
