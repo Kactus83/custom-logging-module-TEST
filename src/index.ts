@@ -31,6 +31,7 @@ class SomeApp extends MainProcessLoggerClient {
     }
 
     async run() {
+        this.displayProcessTrees();
         this.log(LogLevel.INFO, "Démarrage de SomeApp");
 
         // Essayer d'authentifier jusqu'à 5 fois en cas d'échec
