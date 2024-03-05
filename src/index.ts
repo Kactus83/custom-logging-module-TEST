@@ -15,14 +15,15 @@ class SomeApp extends MainProcessLoggerClient {
     constructor() {
         super(
             new MainProcessLoggerConfig(
-                "SomeApp", 
-                LoggerMode.COLORED,
-                LoggerDetailsLevel.DETAILED,
-                LogLevel.TRACE,
-                true, 
-                true
-                )
-            );
+            "SomeApp",                          // The name of the logger, used for identification
+            LoggerMode.COLORED,                 // The mode of the logger, determines the output format
+            LoggerDetailsLevel.DETAILED,        // The level of details to include in the log messages
+            LogLevel.TRACE,                     // The minimum log level to display
+            true,                               // Whether to include timestamps in the log messages
+            true                                // Whether to include the log level in the log messages
+            )
+        );
+
         this.authService = new AuthService(this);
         this.dataService = new DataService(this);
         this.notificationService = new NotificationService(this);
@@ -32,9 +33,9 @@ class SomeApp extends MainProcessLoggerClient {
     async run() {
         this.log(LogLevel.INFO, "Démarrage de SomeApp");
 
-        // Essayer d'authentifier jusqu'à 3 fois en cas d'échec
+        // Essayer d'authentifier jusqu'à 5 fois en cas d'échec
         let authSuccess = false;
-        for (let i = 0; i < 3 && !authSuccess; i++) {
+        for (let i = 0; i < 5 && !authSuccess; i++) {
             authSuccess = await this.authService.authenticateUser();
             if (!authSuccess) {
                 this.log(LogLevel.WARN, "Tentative d'authentification échouée, essai ", (i + 2));
