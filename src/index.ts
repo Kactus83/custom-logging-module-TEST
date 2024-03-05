@@ -16,7 +16,7 @@ class SomeApp extends MainProcessLoggerClient {
         super(
             new MainProcessLoggerConfig(
                 "SomeApp", 
-                LoggerMode.COLORED, 
+                LoggerMode.COLORED,
                 LoggerDetailsLevel.DETAILED,
                 LogLevel.TRACE,
                 true, 
