@@ -16,8 +16,8 @@ class SomeApp extends MainProcessLoggerClient {
         super(
             new MainProcessLoggerConfig(
             "SomeApp",                          // The name of the logger, used for identification
-            LoggerMode.COLORED,                 // The mode of the logger, determines the output format
-            LoggerDetailsLevel.DETAILED,        // The level of details to include in the log messages
+            LoggerMode.COLORED,                 // The mode of the logger, determines the output color
+            LoggerDetailsLevel.DETAILED,        // The level of details to include in the log messages and the format of logs
             LogLevel.TRACE,                     // The minimum log level to display
             true,                               // Whether to include timestamps in the log messages
             true                                // Whether to include the log level in the log messages
