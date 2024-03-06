@@ -1,4 +1,4 @@
 # To run demo : 
 
-npm i
-npm run start
+run "npm i" to install dependencies
+run "npm run start" to start the logger demonstration
