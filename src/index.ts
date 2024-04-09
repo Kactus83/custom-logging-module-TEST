@@ -5,8 +5,12 @@ import { DataService } from "./services/DataService";
 import { NotificationService } from "./services/NotificationService";
 import { PaymentService } from "./services/PaymentService";
 
-
+/**
+ * Boilerplate for main class of an application
+ */
 class SomeApp extends MainProcessLoggerClient {
+
+    // Services used by the app
     authService: AuthService;
     dataService: DataService;
     notificationService: NotificationService;
@@ -30,26 +34,32 @@ class SomeApp extends MainProcessLoggerClient {
         this.paymentService = new PaymentService(this);
     }
 
+    /**
+     * Run the simulation of the app's behavior
+     * @returns 
+     */
     async run() {
         this.displayProcessTrees();
         this.log(LogLevel.INFO, "Démarrage de SomeApp");
 
-        // Essayer d'authentifier jusqu'à 5 fois en cas d'échec
+        // Try to authenticate the user
         let authSuccess = false;
         for (let i = 0; i < 5 && !authSuccess; i++) {
             authSuccess = await this.authService.authenticateUser();
             if (!authSuccess) {
                 this.log(LogLevel.WARN, "Tentative d'authentification échouée, essai ", (i + 2));
-                await delay(500); // Attente avant de réessayer
+                await delay(500);
+                
             }
         }
 
+        // Stop the app if authentication failed
         if (!authSuccess) {
             this.log(LogLevel.ERROR, "Arrêt de SomeApp après plusieurs tentatives d'authentification échouées.");
             return;
         }
 
-        // Processus de récupération des données
+        // Data fetching process
         try {
             await this.dataService.fetchData();
         } catch (error) {
@@ -57,7 +67,7 @@ class SomeApp extends MainProcessLoggerClient {
             this.log(LogLevel.ERROR, "Erreur lors de la récupération des données: ", errorMessage);
         }
 
-        // Processus de traitement de paiement
+        // Payment processing
         try {
             await this.paymentService.processPayment();
         } catch (error) {
@@ -65,7 +75,7 @@ class SomeApp extends MainProcessLoggerClient {
             this.log(LogLevel.ERROR, "Erreur lors du traitement du paiement: ", errorMessage);
         }
 
-        // Envoi d'une notification
+        // Notification sending
         try {
             await this.notificationService.sendNotification();
         } catch (error) {
@@ -77,6 +87,9 @@ class SomeApp extends MainProcessLoggerClient {
     }
 }
 
+/**
+ * Entry point of the logger simulation
+ */
 async function simulateAppBehavior() {
     const app = new SomeApp();
     await app.run();

@@ -1,64 +1,74 @@
 import { LogLevel, SubProcessLoggerClient } from "custom-logging-module";
 import { delay, randomChoice } from "../utils/test-utils";
-import { HttpClientService } from "./HttpClientService"; 
+import { HttpClientService } from "./HttpClientService";
 
+/**
+ * The DataService class extends the SubProcessLoggerClient class and provides methods for fetching and processing data.
+ */
 export class DataService extends SubProcessLoggerClient {
 
-    private httpClientService: HttpClientService = new HttpClientService(this); 
+    private httpClientService: HttpClientService = new HttpClientService(this);
 
+    /**
+     * Constructs a new instance of the DataService class.
+     * @param parent The parent object.
+     */
     constructor(parent: any) {
         super("DataService", parent);
     }
 
+    /**
+     * Fetches data from an external API, processes it, and sends it.
+     */
     async fetchData(): Promise<void> {
-        this.log(LogLevel.TRACE, "Début de la récupération des données.");
+        this.log(LogLevel.TRACE, "Starting data retrieval.");
 
-        // Simuler une requête HTTP pour illustrer la récupération de données depuis une API externe
+        // Simulate an HTTP request to illustrate data retrieval from an external API
         await this.httpClientService.sendHttpRequest();
 
-        // Étape 1: Connexion à la base de données
+        // Step 1: Connect to the database
         await delay(randomChoice([100, 200, 300]));
         if (Math.random() < 0.15) {
-            this.log(LogLevel.ERROR, "Impossible de se connecter à la base de données.");
+            this.log(LogLevel.ERROR, "Failed to connect to the database.");
             return;
         }
-        this.log(LogLevel.DEBUG, "Connexion à la base de données réussie.");
+        this.log(LogLevel.DEBUG, "Successfully connected to the database.");
 
-        // Étape 2: Requête des données
+        // Step 2: Query the data
         await delay(randomChoice([100, 200, 300]));
         if (Math.random() < 0.2) {
-            this.log(LogLevel.ERROR, "Échec de la requête des données.");
+            this.log(LogLevel.ERROR, "Failed to query the data.");
             return;
         }
-        this.log(LogLevel.DEBUG, "Données requêtées avec succès.");
+        this.log(LogLevel.DEBUG, "Successfully queried the data.");
 
-        // Étape 3: Traitement des données
+        // Step 3: Process the data
         await delay(randomChoice([100, 200, 300]));
         if (Math.random() < 0.25) {
             const errorDetails = {
-                error: "Erreur lors du traitement des données",
+                error: "Error while processing the data",
                 code: 500,
                 context: {
-                    step: "Traitement des données",
+                    step: "Data processing",
                     requestId: "abc123",
-                    additionalInfo: "Détail supplémentaire sur l'erreur"
+                    additionalInfo: "Additional error detail"
                 }
             };
-            this.log(LogLevel.ERROR, "Erreur lors du traitement des données.", errorDetails);
+            this.log(LogLevel.ERROR, "Error while processing the data.", errorDetails);
             return;
         }
-        
-        this.log(LogLevel.DEBUG, "Données traitées avec succès.");
 
-        // Étape 4: Envoi des données
+        this.log(LogLevel.DEBUG, "Successfully processed the data.");
+
+        // Step 4: Send the data
         await delay(randomChoice([100, 200, 300]));
         if (Math.random() < 0.1) {
-            this.log(LogLevel.ERROR, "Impossible d'envoyer les données.");
+            this.log(LogLevel.ERROR, "Failed to send the data.");
             return;
         }
-        this.log(LogLevel.INFO, "Données envoyées avec succès.");
+        this.log(LogLevel.INFO, "Successfully sent the data.");
 
-        // Simuler une réponse détaillée de l'API externe
+        // Simulate a detailed response from the external API
         const apiResponse = {
             status: 200,
             data: {
@@ -74,7 +84,7 @@ export class DataService extends SubProcessLoggerClient {
             },
             timestamp: new Date().toISOString()
         };
-        this.log(LogLevel.DEBUG, "Réponse de l'API externe reçue avec succès.", apiResponse);
+        this.log(LogLevel.DEBUG, "Successfully received response from the external API.", apiResponse);
 
     }
 }

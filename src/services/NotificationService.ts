@@ -3,15 +3,26 @@ import { delay, randomChoice } from "../utils/test-utils";
 import { LogisticsService } from "./LogisticsService";
 import { HttpClientService } from "./HttpClientService";
 
+/**
+ * Represents a service for sending notifications.
+ */
 export class NotificationService extends SubProcessLoggerClient {
 
     private logisticsService: LogisticsService = new LogisticsService(this);
     private httpClientService: HttpClientService = new HttpClientService(this); 
 
+    /**
+     * Creates an instance of NotificationService.
+     * @param parent - The parent object.
+     */
     constructor(parent: any) {
         super("NotificationService", parent);
     }
 
+    /**
+     * Sends a notification.
+     * @returns A promise that resolves when the notification is sent.
+     */
     async sendNotification(): Promise<void> {
         this.log(LogLevel.TRACE, "Début de la préparation de la notification.");
         
